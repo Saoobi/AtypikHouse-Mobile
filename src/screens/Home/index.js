@@ -8,31 +8,29 @@ function Home({ navigation }) {
     navigation.navigate(route);
   }
   return (
-    <View style={styles.container_main}>
-      <View style={styles.container_logo}>
+    <View style={styles.containerMain}>
+      <View style={styles.containerLogo}>
         <Image source={require("../../img/logoBlanc.png")} />
       </View>
-      <View style={styles.container_button}>
+      <View style={styles.containerButton}>
         <View>
           <MyButton
-            additionalStyles={{ marginBottom: 30 }}
-            buttonType="default"
+            additionalStyles={{ marginBottom: 15 }}
             buttonTitle="Connexion"
             onPress={() => navigateTo("SignIn")}
           />
           <MyButton
-            buttonType="default"
             buttonTitle="Inscription"
             onPress={() => navigateTo("SignUp")}
           />
         </View>
         <MyButton
-          buttonType="default"
+          buttonType="transparent"
           buttonTitle="Continuer sans m'enregistrer"
           onPress={() => navigateTo("SignUp")}
         />
       </View>
-      <View style={styles.container_cgu}>
+      <View style={styles.containerPrivacy}>
         <Text>
           En appuyant sur Connexion, Inscription ou Continuer sans
           m'enregistrer, j'accepte les Conditions générales d'utilisation et la

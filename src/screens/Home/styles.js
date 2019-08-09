@@ -1,20 +1,21 @@
 const styles = {
-  container_main: {
+  containerMain: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
-    padding: 20
+    padding: 20,
+    backgroundColor: "#ebf6f7"
   },
-  container_logo: {
+  containerLogo: {
     flex: 2
   },
-  container_button: {
-    flex: 4,
+  containerButton: {
+    flex: 2,
     display: "flex",
     justifyContent: "space-between"
   },
-  container_cgu: {
+  containerPrivacy: {
     flex: 2,
     display: "flex",
     justifyContent: "center",
