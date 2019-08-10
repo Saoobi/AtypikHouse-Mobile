@@ -9,16 +9,9 @@ const styles = {
     padding: 20,
     backgroundColor: palette.blueGray
   },
-  containerButton: {
+  form: {
     flex: 2,
-    display: "flex",
-    justifyContent: "space-between"
-  },
-  containerPrivacy: {
-    flex: 2,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
+    width: "100%"
   }
 };
 

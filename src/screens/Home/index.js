@@ -1,6 +1,8 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
-import MyButton from "../../components/Button";
+import { View, Text } from "react-native";
+
+import Button from "../../components/Button";
+import Logo from "../../components/Logo";
 import styles from "./styles";
 
 function Home({ navigation }) {
@@ -9,22 +11,20 @@ function Home({ navigation }) {
   }
   return (
     <View style={styles.containerMain}>
-      <View style={styles.containerLogo}>
-        <Image source={require("../../img/logoBlanc.png")} />
-      </View>
+      <Logo />
       <View style={styles.containerButton}>
         <View>
-          <MyButton
+          <Button
             additionalStyles={{ marginBottom: 15 }}
             buttonTitle="Connexion"
             onPress={() => navigateTo("SignIn")}
           />
-          <MyButton
+          <Button
             buttonTitle="Inscription"
             onPress={() => navigateTo("SignUp")}
           />
         </View>
-        <MyButton
+        <Button
           buttonType="transparent"
           buttonTitle="Continuer sans m'enregistrer"
           onPress={() => navigateTo("SignUp")}

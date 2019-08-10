@@ -13,7 +13,10 @@ const TabNavigator = createStackNavigator(
       }
     },
     SignIn: {
-      screen: SignIn
+      screen: SignIn,
+      navigationOptions: {
+        title: "Connexion"
+      }
     },
     SignUp: {
       screen: SignUp

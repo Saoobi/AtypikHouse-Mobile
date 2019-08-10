@@ -5,7 +5,7 @@ const { blue, white } = palette;
 export const baseStyles = {
   touchable: {
     padding: 12,
-    minWidth: 280,
+    minWidth: "100%",
     borderRadius: 6,
     shadowColor: "#000",
     shadowOffset: {
