@@ -27,7 +27,7 @@ function Home({ navigation }) {
         <Button
           buttonType="transparent"
           buttonTitle="Continuer sans m'enregistrer"
-          onPress={() => navigateTo("SignUp")}
+          onPress={() => navigateTo("Lodgings")}
         />
       </View>
       <View style={styles.containerPrivacy}>

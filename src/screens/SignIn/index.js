@@ -1,10 +1,11 @@
-import React, { Component, useState } from "react";
-import { View } from "react-native";
+import React, { Component } from "react";
+import { View, KeyboardAvoidingView } from "react-native";
 
-import Button from "../../components/Button";
-import Input from "../../components/Input";
+import Form from "../../components/Form";
 import Logo from "../../components/Logo";
 import styles from "./styles";
+
+import { signInUser } from "../../API";
 
 class SignIn extends Component {
   state = {
@@ -18,46 +19,43 @@ class SignIn extends Component {
     });
   };
 
-  handleSubmit = () => {
+  handleFormSubmit = () => {
     const { email, password } = this.state;
+    signInUser(email, password).then(data => {
+      console.log(data);
+    });
+
     alert(`email: ${email} - password ${password}`);
   };
 
   render() {
-    const { email, password } = this.state;
+    const FormInputs = [
+      {
+        additionalStyles: { marginBottom: 25 },
+        label: "E-mail",
+        name: "email"
+      },
+      {
+        additionalStyles: { marginBottom: 60 },
+        label: "Mot de passe",
+        name: "password"
+      }
+    ];
 
     return (
-      <View style={styles.containerMain}>
+      <KeyboardAvoidingView style={styles.containerMain} behavior="position">
         <Logo />
         <View style={styles.form}>
-          <Input
-            additionalStyles={{ marginBottom: 25 }}
-            label="E-mail"
-            onChange={text => this.handleInputChange(text, "email")}
-            placeholder="email@examples.com"
-            value={email}
+          <Form
+            handleFormSubmit={this.handleFormSubmit}
+            handleInputChange={this.handleInputChange}
+            inputsArray={FormInputs}
+            submitButtonTitle="Connexion"
           />
-          <Input
-            additionalStyles={{ marginBottom: 60 }}
-            label="Mot de passe"
-            onChange={text => this.handleInputChange(text, "password")}
-            placeholder="*******"
-            type="password"
-            value={password}
-          />
-          <Button buttonTitle="Connexion" onPress={this.handleSubmit} />
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
-
-/*return (
-    <View>
-      <Input />
-      <Input />
-    </View>
-  );
-}*/
 
 export default SignIn;

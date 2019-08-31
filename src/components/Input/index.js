@@ -1,16 +1,10 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { TextInput, View, Text } from "react-native";
 
 import styles from "./styles";
 
-function MyInput({
-  additionalStyles,
-  label,
-  onChange,
-  type = "text",
-  placeholder,
-  value
-}) {
+function Input({ additionalStyles, label, onChange, type = "text" }) {
   return (
     <View style={[styles.container, additionalStyles]}>
       <Text style={styles.label}>{label}</Text>
@@ -18,10 +12,15 @@ function MyInput({
         onChangeText={onChange}
         style={[styles.input]}
         secureTextEntry={type === "password"}
-        value={value}
       />
     </View>
   );
 }
 
-export default MyInput;
+Input.propTypes = {
+  additionalStyles: PropTypes.object,
+  label: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  type: PropTypes.string
+};
+export default Input;
