@@ -4,8 +4,8 @@ const styles = {
     width: 100
   },
   medium: {
-    height: 350,
-    width: 350
+    height: 300,
+    width: 300
   }
 };
 

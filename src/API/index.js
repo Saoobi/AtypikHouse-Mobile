@@ -1,14 +1,13 @@
-const url = "http://192.168.1.50:8000/";
-let USER_TOKEN;
+import { AsyncStorage } from "react-native";
+
+const url = "http://192.168.1.50:8000/api/";
 
 export async function signInUser(username, password) {
   let user;
 
-  await getUserToken(username, password).then(token => {
-    USER_TOKEN = token;
-  });
+  await getUserToken(username, password);
 
-  await getUser(USER_TOKEN).then(dataUser => {
+  await getUser().then(dataUser => {
     user = dataUser;
   });
 
@@ -16,7 +15,7 @@ export async function signInUser(username, password) {
 }
 
 export async function getUserToken(username, password) {
-  const urlPath = url + "api/login_check";
+  const urlPath = url + "login_check";
 
   try {
     let response = await fetch(urlPath, {
@@ -31,14 +30,23 @@ export async function getUserToken(username, password) {
       })
     });
     let responseJson = await response.json();
+
+    try {
+      await AsyncStorage.setItem("USER_TOKEN", responseJson.token);
+    } catch (error) {
+      console.log(error.message);
+    }
+
     return responseJson.token;
   } catch (error) {
     console.error(error);
   }
 }
 
-export async function getUser(token) {
-  const urlPath = url + "api/";
+export async function getUser() {
+  const token = await AsyncStorage.getItem("USER_TOKEN");
+
+  const urlPath = url;
 
   try {
     let response = await fetch(urlPath, {
@@ -48,6 +56,47 @@ export async function getUser(token) {
       }
     });
     let responseJson = await response.json();
+    return responseJson;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getLodgingsFromApiWithSearchText(text) {
+  const token = await AsyncStorage.getItem("USER_TOKEN");
+  const urlPath = `${url}property/${text}`;
+  console.log(urlPath);
+  try {
+    let response = await fetch(urlPath, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    });
+    let responseJson = await response.json();
+
+    console.log(responseJson);
+    return responseJson;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getReservationsUserFromApi() {
+  const token = await AsyncStorage.getItem("USER_TOKEN");
+  console.log(token);
+  const urlPath = `${url}booking`;
+  console.log(urlPath);
+  try {
+    let response = await fetch(urlPath, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer" + token
+      }
+    });
+    let responseJson = await response.json();
+
+    console.log(responseJson);
     return responseJson;
   } catch (error) {
     console.error(error);

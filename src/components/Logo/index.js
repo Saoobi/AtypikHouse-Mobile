@@ -1,13 +1,17 @@
 import React from "react";
 import { Image } from "react-native";
 
-import styles from "./styles";
-
-function Logo({ size = "medium" }) {
+function Logo() {
   return (
     <Image
       source={require("../../img/logoBlanc.png")}
-      style={{ resizeMode: "stretch", ...styles[size] }}
+      style={{
+        resizeMode: "stretch",
+        flex: 1,
+        width: undefined,
+        height: "100%",
+        aspectRatio: 1
+      }}
     />
   );
 }

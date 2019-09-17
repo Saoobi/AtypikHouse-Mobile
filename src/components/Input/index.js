@@ -4,7 +4,7 @@ import { TextInput, View, Text } from "react-native";
 
 import styles from "./styles";
 
-function Input({ additionalStyles, label, onChange, type = "text" }) {
+function Input({ additionalStyles, label, onChange, type = "text", ...props }) {
   return (
     <View style={[styles.container, additionalStyles]}>
       <Text style={styles.label}>{label}</Text>
@@ -12,6 +12,7 @@ function Input({ additionalStyles, label, onChange, type = "text" }) {
         onChangeText={onChange}
         style={[styles.input]}
         secureTextEntry={type === "password"}
+        {...props}
       />
     </View>
   );

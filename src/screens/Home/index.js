@@ -4,30 +4,30 @@ import { View, Text } from "react-native";
 import Button from "../../components/Button";
 import Logo from "../../components/Logo";
 import styles from "./styles";
+import NavigationService from "../../components/NavigationService";
 
-function Home({ navigation }) {
-  function navigateTo(route) {
-    navigation.navigate(route);
-  }
+function Home() {
   return (
     <View style={styles.containerMain}>
-      <Logo />
+      <View style={styles.logo}>
+        <Logo />
+      </View>
       <View style={styles.containerButton}>
         <View>
           <Button
             additionalStyles={{ marginBottom: 15 }}
             buttonTitle="Connexion"
-            onPress={() => navigateTo("SignIn")}
+            onPress={() => NavigationService.navigate("SignIn")}
           />
           <Button
             buttonTitle="Inscription"
-            onPress={() => navigateTo("SignUp")}
+            onPress={() => NavigationService.navigate("SignUp")}
           />
         </View>
         <Button
           buttonType="transparent"
           buttonTitle="Continuer sans m'enregistrer"
-          onPress={() => navigateTo("Lodgings")}
+          onPress={() => NavigationService.navigate("Lodgings")}
         />
       </View>
       <View style={styles.containerPrivacy}>

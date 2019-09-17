@@ -31,12 +31,10 @@ class SignIn extends Component {
   render() {
     const FormInputs = [
       {
-        additionalStyles: { marginBottom: 25 },
         label: "E-mail",
         name: "email"
       },
       {
-        additionalStyles: { marginBottom: 60 },
         label: "Mot de passe",
         name: "password"
       }
@@ -44,7 +42,9 @@ class SignIn extends Component {
 
     return (
       <KeyboardAvoidingView style={styles.containerMain} behavior="position">
-        <Logo />
+        <View style={styles.logo}>
+          <Logo />
+        </View>
         <View style={styles.form}>
           <Form
             handleFormSubmit={this.handleFormSubmit}

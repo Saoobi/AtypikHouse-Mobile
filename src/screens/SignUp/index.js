@@ -3,6 +3,7 @@ import { View, KeyboardAvoidingView } from "react-native";
 
 import Logo from "../../components/Logo";
 import Form from "../../components/Form";
+import styles from "./styles";
 
 class SignUp extends Component {
   state = {
@@ -46,16 +47,20 @@ class SignUp extends Component {
     ];
 
     return (
-      <KeyboardAvoidingView behavior="position">
-        <Logo />
-        <View>
+      <KeyboardAvoidingView style={styles.containerMain} behavior="position">
+        <View style={styles.logo}>
+          <Logo />
+        </View>
+        <View style={styles.form}>
           <Form
-            inputsArray={FormInputs}
-            handleInputChange={this.handleInputChange}
             handleFormSubmit={this.handleFormSubmit}
+            handleInputChange={this.handleInputChange}
+            inputsArray={FormInputs}
             submitButtonTitle="Inscription"
           />
         </View>
+
+        <View style={{ height: 100 }} />
       </KeyboardAvoidingView>
     );
   }
