@@ -27,7 +27,7 @@ function Home() {
         <Button
           buttonType="transparent"
           buttonTitle="Continuer sans m'enregistrer"
-          onPress={() => NavigationService.navigate("Lodgings")}
+          onPress={() => NavigationService.navigate("Visiting")}
         />
       </View>
       <View style={styles.containerPrivacy}>

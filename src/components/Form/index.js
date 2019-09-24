@@ -4,14 +4,18 @@ import { View } from "react-native";
 
 import Button from "../Button";
 import Input from "../Input";
-import { Item } from "native-base";
+import Picker from "../Picker";
 
 function Form({
-  handleFormSubmit,
+  //Champs required
   handleInputChange,
   inputsArray,
-  submitButtonTitle,
-  withButtonSubmit = true
+
+  withButtonSubmit = true,
+
+  //With Submit button
+  handleFormSubmit,
+  submitButtonTitle
 }) {
   if (withButtonSubmit) {
     return (
@@ -36,14 +40,35 @@ function Form({
     return (
       <View>
         {inputsArray.map((item, index) => {
-          return (
-            <Input
-              key={index}
-              onChange={text => handleInputChange(text, item.name)}
-              {...item}
-              placeholder={item.placeholder}
-            />
-          );
+          switch (item.type) {
+            case "input":
+              return (
+                <Input
+                  key={index}
+                  onChange={text => handleInputChange(text, item.name)}
+                  {...item}
+                  placeholder={item.placeholder}
+                />
+              );
+            case "picker":
+              return (
+                <Picker
+                  key={index}
+                  onChange={text => handleInputChange(text, item.selectedValue)}
+                  {...item}
+                />
+              );
+
+            default:
+              return (
+                <Input
+                  key={index}
+                  onChange={text => handleInputChange(text, item.name)}
+                  {...item}
+                  placeholder={item.placeholder}
+                />
+              );
+          }
         })}
       </View>
     );
@@ -51,9 +76,9 @@ function Form({
 }
 
 Form.propTypes = {
-  handleFormSubmit: PropTypes.func.isRequired,
+  handleFormSubmit: PropTypes.func,
   handleInputChange: PropTypes.func.isRequired,
   inputsArray: PropTypes.array.isRequired,
-  submitButtonTitle: PropTypes.string.isRequired
+  submitButtonTitle: PropTypes.string
 };
 export default Form;

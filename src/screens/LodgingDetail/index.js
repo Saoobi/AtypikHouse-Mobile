@@ -1,69 +1,158 @@
-import React from "react";
+import React, { Component } from "react";
 import {
   StyleSheet,
   View,
   Text,
   ActivityIndicator,
   ScrollView,
-  Image
+  Dimensions
 } from "react-native";
-//import { getLodgingDetailFromApi, getImageFromApi } from "../API/TMDBAPi";
+import { SliderBox } from "react-native-image-slider-box";
+import Geocoder from "react-native-geocoding";
+import getDirections from "react-native-google-maps-directions";
 
-class LodgingDetail extends React.Component {
+import Button from "../../components/Button";
+import palette from "../../stylesheets/palette";
+import Icon from "../../components/Icon";
+import NavigationService from "../../components/NavigationService";
+import { getLodgingDetailFromApi } from "../../API";
+
+class LodgingDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
       lodging: undefined,
-      isLoading: true
+      isLoading: true,
+      images: []
     };
   }
 
-  /* componentDidMount() {
+  componentDidMount() {
     getLodgingDetailFromApi(this.props.navigation.state.params.idLodging).then(
       data => {
         this.setState({
           lodging: data,
-          isLoading: false
+          isLoading: false,
+          images: data.albums
         });
       }
     );
-  }*/
+  }
+
+  _getMapsLocation() {
+    const GOOGLE_MAPS_APIKEY = "AIzaSyC_hq_XTTDYtv6WeyskuFJ2W-0I3RLl41c";
+
+    Geocoder.init(GOOGLE_MAPS_APIKEY);
+
+    //Get GPS position from location name
+    Geocoder.from(
+      `${this.state.lodging.adress} ${this.state.lodging.codePostal} ${this.state.lodging.city}`
+    )
+      .then(json => {
+        const positionDestination = json.results[0].geometry.location;
+
+        console.log(positionDestination);
+
+        //Itineraire from current location (default) to positionDestination
+        const data = {
+          destination: {
+            latitude: positionDestination.lat,
+            longitude: positionDestination.lng
+          },
+          params: [
+            {
+              key: "travelmode",
+              value: "driving"
+            }
+          ]
+        };
+
+        getDirections(data);
+      })
+      .catch(error => console.warn(error));
+  }
 
   _displayLodging() {
     const lodging = this.state.lodging;
     if (lodging != undefined) {
       return (
         <ScrollView style={styles.scrollView_container}>
-          <Image
-            style={styles.image}
-            source={{ uri: getImageFromApi(lodging.backdrop_path) }}
+          <SliderBox
+            images={this.state.images}
+            sliderBoxHeight={300}
+            dotColor={palette.blue}
           />
-          <Text style={styles.title_text}>{lodging.title}</Text>
-          <Text style={styles.description_text}>{lodging.overview}</Text>
-          <Text style={styles.default_text}>Sorti le </Text>
-          <Text style={styles.default_text}>
-            Note : {lodging.vote_average} / 10
-          </Text>
-          <Text style={styles.default_text}>
-            Nombre de votes : {lodging.vote_count}
-          </Text>
-          <Text style={styles.default_text}>Budget :</Text>
-          <Text style={styles.default_text}>
-            Genre(s) :{" "}
-            {lodging.genres
-              .map(function(genre) {
-                return genre.name;
-              })
-              .join(" / ")}
-          </Text>
-          <Text style={styles.default_text}>
-            Companie(s) :{" "}
-            {lodging.production_companies
-              .map(function(company) {
-                return company.name;
-              })
-              .join(" / ")}
-          </Text>
+          <Icon
+            color={palette.blue}
+            name="arrow-back"
+            onPress={() => NavigationService.goBack()}
+            size={28}
+            style={styles.icon_back}
+          />
+
+          <View style={styles.container_content}>
+            <View style={styles.container_title}>
+              <Text style={styles.category_text}>{lodging.category}</Text>
+              <Text style={styles.title_text}>{lodging.name}</Text>
+            </View>
+            <View style={styles.container_data}>
+              <Text>{lodging.city}</Text>
+              <Text>Hôte : {lodging.proprietaire.firstname}</Text>
+            </View>
+            <View style={styles.container_data}>
+              <View style={styles.container_titleDescription}>
+                <Icon
+                  style={styles.icon_titleDescription}
+                  color={palette.black}
+                  name="home"
+                  size={20}
+                />
+                <Text style={styles.titleDescription_text}>Logement</Text>
+              </View>
+              <View style={styles.container_detail}>
+                <Text>
+                  {lodging.room} pièces - {lodging.surface} m²
+                </Text>
+                <Text style={styles.description_text}>
+                  {lodging.description}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.container_data}>
+              <View style={styles.container_titleDescription}>
+                <Icon
+                  style={styles.icon_titleDescription}
+                  color={palette.black}
+                  name="navigate"
+                  size={20}
+                />
+                <Text style={styles.titleDescription_text}>Localisation</Text>
+              </View>
+              <View style={styles.container_detail}>
+                <Text>
+                  {lodging.adress}, {lodging.codePostal}
+                </Text>
+                <Text>{lodging.city}</Text>
+                <Button
+                  buttonType="transparent"
+                  buttonTitle="Par ici !"
+                  onPress={() => this._getMapsLocation()}
+                />
+              </View>
+            </View>
+            <View style={styles.container_data}>
+              <View style={styles.container_titleDescription}>
+                <Icon
+                  style={styles.icon_titleDescription}
+                  color={palette.black}
+                  name="chatboxes"
+                  size={20}
+                />
+                <Text style={styles.titleDescription_text}>Commentaires</Text>
+              </View>
+              <View style={styles.container_detail}></View>
+            </View>
+          </View>
         </ScrollView>
       );
     }
@@ -103,35 +192,53 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center"
   },
-  scrollview_container: {
+  scrollView_container: {
     flex: 1
   },
-  image: {
-    height: 169,
-    margin: 5
+  icon_back: {
+    position: "absolute",
+    top: "6%",
+    left: "5%"
+  },
+  container_content: {
+    flex: 1,
+    margin: 25
+  },
+  container_title: {
+    marginBottom: 25
+  },
+  container_data: {
+    marginBottom: 15
+  },
+  category_text: {
+    color: palette.blue,
+    fontSize: 13,
+    fontWeight: "bold"
   },
   title_text: {
     fontWeight: "bold",
-    fontSize: 35,
+    fontSize: 21,
     flex: 1,
     flexWrap: "wrap",
-    marginLeft: 5,
-    marginRight: 5,
-    marginTop: 10,
-    marginBottom: 10,
-    color: "#000000",
-    textAlign: "center"
+    color: palette.black
+  },
+  container_titleDescription: {
+    flexDirection: "row",
+    marginBottom: 5
+  },
+  icon_titleDescription: {
+    marginRight: 10
+  },
+  titleDescription_text: {
+    fontSize: 15,
+    fontWeight: "bold"
+  },
+  container_detail: {
+    marginLeft: 10
   },
   description_text: {
     fontStyle: "italic",
-    color: "#666666",
-    margin: 5,
-    marginBottom: 15
-  },
-  default_text: {
-    marginLeft: 5,
-    marginRight: 5,
-    marginTop: 5
+    color: palette.black
   }
 });
 

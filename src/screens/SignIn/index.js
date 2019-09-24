@@ -4,6 +4,7 @@ import { View, KeyboardAvoidingView } from "react-native";
 import Form from "../../components/Form";
 import Logo from "../../components/Logo";
 import styles from "./styles";
+import NavigationService from "../../components/NavigationService";
 
 import { signInUser } from "../../API";
 
@@ -24,19 +25,21 @@ class SignIn extends Component {
     signInUser(email, password).then(data => {
       console.log(data);
     });
-
-    alert(`email: ${email} - password ${password}`);
+    NavigationService.navigate("Lodgings");
+    //alert(`email: ${email} - password ${password}`);
   };
 
   render() {
     const FormInputs = [
       {
         label: "E-mail",
-        name: "email"
+        name: "email",
+        type: "input"
       },
       {
         label: "Mot de passe",
-        name: "password"
+        name: "password",
+        type: "password"
       }
     ];
 

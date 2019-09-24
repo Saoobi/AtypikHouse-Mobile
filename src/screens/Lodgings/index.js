@@ -3,21 +3,26 @@ import {
   ActivityIndicator,
   FlatList,
   ScrollView,
-  StyleSheet,
   Text,
   View
 } from "react-native";
 
+import styles from "./styles";
+
 import Form from "../../components/Form";
 import Lodging from "../../components/Lodging";
 import NavigationService from "../../components/NavigationService";
-import { getLodgingsFromApiWithSearchText } from "../../API";
-import palette from "../../stylesheets/palette";
+import { getCategory, getLodgingsFromApiWithSearchText } from "../../API";
 
 class Lodgings extends Component {
   constructor(props) {
     super(props);
-    this.state = { lodgings: [], isLoading: false, category: "" };
+    this.state = {
+      // listPicker: [],
+      lodgings: [],
+      isLoading: false,
+      category: "Cabane"
+    };
   }
 
   handleInputChange = (text, key) => {
@@ -28,14 +33,25 @@ class Lodgings extends Component {
 
   _loadLodgings() {
     this.setState({ isLoading: true });
-    if (this.state.category.length > 0) {
-      getLodgingsFromApiWithSearchText(this.state.category).then(data => {
-        this.setState({
-          lodgings: [...this.state.lodgings, ...data],
-          isLoading: false
-        });
+    getLodgingsFromApiWithSearchText(this.state.category).then(data => {
+      this.setState({
+        lodgings: [...this.state.lodgings, ...data],
+        isLoading: false
       });
-    }
+    });
+  }
+
+  componentDidMount() {
+    /*getCategory().then(data => {
+      const listCategory = [];
+      data.map(item => {
+        listCategory.push(item.category);
+      });
+      this.setState({
+        listPicker: [...this.state.listPicker, ...listCategory]
+      });
+    });*/
+    this._loadLodgings();
   }
 
   handleFormSubmit = () => {
@@ -50,39 +66,37 @@ class Lodgings extends Component {
     );
   };
 
-  /* _displayDetailForLodging = idLodging => {
+  _displayDetailForLodging = idLodging => {
     NavigationService.navigate("LodgingDetail", { idLodging: idLodging });
-  };*/
-  _displayDetailForLodging = () => {
-    NavigationService.navigate("LodgingDetail");
   };
 
-  _displayLoading() {
+  _displayResultData() {
+    /* AFFICHAGE */
+
+    //Lors de la recherche
     if (this.state.isLoading) {
       return (
-        <View>
+        <View style={styles.containerError}>
           <ActivityIndicator size="large" />
         </View>
       );
     }
-  }
 
-  _displayResult() {
+    //Lorsque aucun résultat n'a été trouvé
+    if (!this.state.lodgings.length && !this.state.isLoading) {
+      return (
+        <View style={styles.containerError}>
+          <Text style={styles.textError}>
+            Pas de résultat trouvé pour votre recherche
+          </Text>
+        </View>
+      );
+    }
+
+    //Lorsque des données ont été récupérée
     if (this.state.lodgings && this.state.lodgings.length) {
       return (
         <ScrollView>
-          <Lodging
-            lodging=""
-            displayDetailForLodging={this._displayDetailForLodging}
-          />
-          <Lodging
-            lodging=""
-            displayDetailForLodging={this._displayDetailForLodging}
-          />
-          <Lodging
-            lodging=""
-            displayDetailForLodging={this._displayDetailForLodging}
-          />
           <FlatList
             data={this.state.lodgings}
             keyExtractor={item => item.id.toString()}
@@ -95,56 +109,46 @@ class Lodgings extends Component {
           />
         </ScrollView>
       );
-    } else {
-      return (
-        <View style={styles.containerError}>
-          <Text style={styles.textError}>
-            Pas de résultat trouvé pour votre recherche
-          </Text>
-        </View>
-      );
     }
   }
+
   render() {
+    /*const FormInputs = [
+      {
+        label: "Type de logement",
+        listPicker: this.state.listPicker,
+        name: "category",
+        onSubmitEditing: this.handleFormSubmit,
+        placeholder: "Cabane, Foret, . . .",
+        selectedValue: this.state.category,
+        type: "picker"
+      }
+    ];*/
+
     const FormInputs = [
       {
         label: "Type de logement",
         name: "category",
         onSubmitEditing: this.handleFormSubmit,
-        placeholder: "Cabane, Foret, . . ."
+        placeholder: "Cabane, Foret, . . .",
+        type: "input",
+        value: this.state.category
       }
     ];
 
     return (
-      <View>
+      <View style={styles.containerMain}>
         <View>
           <Form
-            handleFormSubmit={this.handleFormSubmit}
             handleInputChange={this.handleInputChange}
             inputsArray={FormInputs}
-            submitButtonTitle="Recherche"
             withButtonSubmit={false}
           />
         </View>
-        {this._displayResult()}
-
-        {this._displayLoading()}
+        {this._displayResultData()}
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  containerError: {
-    marginTop: 200
-  },
-  textError: {
-    margin: 20,
-    fontStyle: "italic",
-    fontSize: 20,
-    color: palette.blue,
-    textAlign: "center"
-  }
-});
 
 export default Lodgings;

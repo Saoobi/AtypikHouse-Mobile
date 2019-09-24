@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 
+import { AsyncStorage } from "react-native";
 import {
   createStackNavigator,
   createAppContainer,
@@ -10,7 +11,9 @@ import { createMaterialBottomTabNavigator } from "react-navigation-material-bott
 import Icon from "./src/components/Icon";
 import NavigationService from "./src/components/NavigationService";
 
+import Disconnect from "./src/screens/Disconnect";
 import Home from "./src/screens/Home";
+import Locations from "./src/screens/Locations";
 import Lodgings from "./src/screens/Lodgings";
 import LodgingDetail from "./src/screens/LodgingDetail";
 import palette from "./src/stylesheets/palette";
@@ -19,6 +22,18 @@ import SignIn from "./src/screens/SignIn";
 import SignUp from "./src/screens/SignUp";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      token: undefined
+    };
+  }
+  async componentDidMount() {
+    const data = await AsyncStorage.getItem("USER_TOKEN");
+    this.setState({
+      token: data
+    });
+  }
   render() {
     const LodgingsStack = createStackNavigator(
       {
@@ -29,7 +44,38 @@ class App extends Component {
           }
         },
         LodgingDetail: {
-          screen: LodgingDetail
+          screen: LodgingDetail,
+          navigationOptions: {
+            header: null
+          }
+        }
+      },
+      {
+        headerLayoutPreset: "center"
+      }
+    );
+
+    const LodgingsStackVisitor = createStackNavigator(
+      {
+        LodgingsVisitor: {
+          screen: Lodgings,
+          navigationOptions: {
+            title: "Les logements",
+            headerLeft: (
+              <Icon
+                additionalStyles={{ marginLeft: 15 }}
+                name="arrow-back"
+                onPress={() => NavigationService.goBack()}
+                size={28}
+              />
+            )
+          }
+        },
+        LodgingDetail: {
+          screen: LodgingDetail,
+          navigationOptions: {
+            header: null
+          }
         }
       },
       {
@@ -43,6 +89,20 @@ class App extends Component {
           screen: Reservations,
           navigationOptions: {
             title: "Mes réservations"
+          }
+        }
+      },
+      {
+        headerLayoutPreset: "center"
+      }
+    );
+
+    const LocationsStack = createStackNavigator(
+      {
+        Locations: {
+          screen: Locations,
+          navigationOptions: {
+            title: "Mes atypikHouses"
           }
         }
       },
@@ -65,9 +125,27 @@ class App extends Component {
         Reservations: {
           screen: ReservationsStack,
           navigationOptions: {
-            tabBarLabel: "Rerservations",
+            tabBarLabel: "Rerservation",
             tabBarIcon: ({ tintColor }) => (
-              <Icon color={tintColor} name="pin" size={24} />
+              <Icon color={tintColor} name="calendar" size={24} />
+            )
+          }
+        },
+        Locations: {
+          screen: LocationsStack,
+          navigationOptions: {
+            tabBarLabel: "Location",
+            tabBarIcon: ({ tintColor }) => (
+              <Icon color={tintColor} name="leaf" size={24} />
+            )
+          }
+        },
+        Disconnect: {
+          screen: Disconnect,
+          navigationOptions: {
+            tabBarLabel: "Déconnexion",
+            tabBarIcon: ({ tintColor }) => (
+              <Icon color={tintColor} name="power" size={24} />
             )
           }
         }
@@ -99,6 +177,12 @@ class App extends Component {
           navigationOptions: {
             title: "Inscription"
           }
+        },
+        Visiting: {
+          screen: LodgingsStackVisitor,
+          navigationOptions: {
+            header: null
+          }
         }
       },
       {
@@ -106,13 +190,15 @@ class App extends Component {
       }
     );
 
+    const AppNavigatorInitialRoute = this.state.token ? "App" : "Auth";
+
     const AppNavigator = createSwitchNavigator(
       {
         App: AppDrawer,
         Auth: AuthStack
       },
       {
-        initialRouteName: "Auth"
+        initialRouteName: AppNavigatorInitialRoute
       }
     );
 

@@ -30,19 +30,23 @@ class SignUp extends Component {
     const FormInputs = [
       {
         label: "Nom",
-        name: "lastname"
+        name: "lastname",
+        type: "input"
       },
       {
         label: "Prenom",
-        name: "name"
+        name: "name",
+        type: "input"
       },
       {
         label: "E-mail",
-        name: "email"
+        name: "email",
+        type: "input"
       },
       {
         label: "Mot de passe",
-        name: "password"
+        name: "password",
+        type: "input"
       }
     ];
 

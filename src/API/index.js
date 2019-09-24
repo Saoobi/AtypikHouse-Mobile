@@ -45,8 +45,25 @@ export async function getUserToken(username, password) {
 
 export async function getUser() {
   const token = await AsyncStorage.getItem("USER_TOKEN");
-
   const urlPath = url;
+
+  try {
+    let response = await fetch(urlPath, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    });
+    let responseJson = await response.json();
+    return responseJson;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getCategory() {
+  const token = await AsyncStorage.getItem("USER_TOKEN");
+  const urlPath = url + "category";
 
   try {
     let response = await fetch(urlPath, {
@@ -65,7 +82,25 @@ export async function getUser() {
 export async function getLodgingsFromApiWithSearchText(text) {
   const token = await AsyncStorage.getItem("USER_TOKEN");
   const urlPath = `${url}property/${text}`;
-  console.log(urlPath);
+
+  try {
+    let response = await fetch(urlPath, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    });
+    let responseJson = await response.json();
+    return responseJson;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getLodgingDetailFromApi(id) {
+  const token = await AsyncStorage.getItem("USER_TOKEN");
+  const urlPath = `${url}property/find/${id}`;
+
   try {
     let response = await fetch(urlPath, {
       method: "GET",
@@ -75,7 +110,6 @@ export async function getLodgingsFromApiWithSearchText(text) {
     });
     let responseJson = await response.json();
 
-    console.log(responseJson);
     return responseJson;
   } catch (error) {
     console.error(error);
