@@ -1,20 +1,22 @@
 import React, { Component } from "react";
 import {
-  StyleSheet,
-  View,
-  Text,
   ActivityIndicator,
+  FlatList,
   ScrollView,
-  Dimensions
+  Text,
+  View
 } from "react-native";
-import { SliderBox } from "react-native-image-slider-box";
 import Geocoder from "react-native-geocoding";
 import getDirections from "react-native-google-maps-directions";
+import moment from "moment";
+import { SliderBox } from "react-native-image-slider-box";
+import StarRating from "react-native-star-rating";
 
 import Button from "../../components/Button";
-import palette from "../../stylesheets/palette";
 import Icon from "../../components/Icon";
 import NavigationService from "../../components/NavigationService";
+import palette from "../../stylesheets/palette";
+import styles from "./styles";
 import { getLodgingDetailFromApi } from "../../API";
 
 class LodgingDetail extends Component {
@@ -77,19 +79,21 @@ class LodgingDetail extends Component {
     if (lodging != undefined) {
       return (
         <ScrollView style={styles.scrollView_container}>
-          <SliderBox
-            images={this.state.images}
-            sliderBoxHeight={300}
-            dotColor={palette.blue}
-          />
-          <Icon
-            color={palette.blue}
-            name="arrow-back"
-            onPress={() => NavigationService.goBack()}
-            size={28}
-            style={styles.icon_back}
-          />
-
+          <View>
+            <SliderBox
+              images={this.state.images}
+              sliderBoxHeight={300}
+              dotColor={palette.blue}
+            />
+            <Icon
+              color={palette.blue}
+              name="arrow-back"
+              onPress={() => NavigationService.goBack()}
+              size={28}
+              style={styles.icon_back}
+            />
+            <Text style={styles.price_text}>{lodging.price.toFixed(0)}€</Text>
+          </View>
           <View style={styles.container_content}>
             <View style={styles.container_title}>
               <Text style={styles.category_text}>{lodging.category}</Text>
@@ -150,7 +154,40 @@ class LodgingDetail extends Component {
                 />
                 <Text style={styles.titleDescription_text}>Commentaires</Text>
               </View>
-              <View style={styles.container_detail}></View>
+              <View style={styles.container_detail}>
+                <FlatList
+                  data={lodging.comments}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item }) => (
+                    <View style={styles.container_comment}>
+                      <View style={styles.container_comment_header}>
+                        <View style={styles.container_comment_name}>
+                          <Text style={styles.comment_name_text}>Benjamin</Text>
+                        </View>
+                        <View style={styles.container_comment_date}>
+                          <Text style={styles.comment_date_text}>
+                            {moment(item.date).format("DD/MM/YYYY")}
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={styles.container_comment_body}>
+                        <Text style={styles.comment_text}>{item.comment}</Text>
+                      </View>
+                      <View style={styles.container_footer}>
+                        <View style={styles.container_note}>
+                          <StarRating
+                            disabled={true}
+                            fullStarColor={palette.blue}
+                            maxStars={5}
+                            rating={item.note}
+                            starSize={10}
+                          />
+                        </View>
+                      </View>
+                    </View>
+                  )}
+                />
+              </View>
             </View>
           </View>
         </ScrollView>
@@ -178,68 +215,5 @@ class LodgingDetail extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  main_container: {
-    flex: 1
-  },
-  loading_container: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  scrollView_container: {
-    flex: 1
-  },
-  icon_back: {
-    position: "absolute",
-    top: "6%",
-    left: "5%"
-  },
-  container_content: {
-    flex: 1,
-    margin: 25
-  },
-  container_title: {
-    marginBottom: 25
-  },
-  container_data: {
-    marginBottom: 15
-  },
-  category_text: {
-    color: palette.blue,
-    fontSize: 13,
-    fontWeight: "bold"
-  },
-  title_text: {
-    fontWeight: "bold",
-    fontSize: 21,
-    flex: 1,
-    flexWrap: "wrap",
-    color: palette.black
-  },
-  container_titleDescription: {
-    flexDirection: "row",
-    marginBottom: 5
-  },
-  icon_titleDescription: {
-    marginRight: 10
-  },
-  titleDescription_text: {
-    fontSize: 15,
-    fontWeight: "bold"
-  },
-  container_detail: {
-    marginLeft: 10
-  },
-  description_text: {
-    fontStyle: "italic",
-    color: palette.black
-  }
-});
 
 export default LodgingDetail;

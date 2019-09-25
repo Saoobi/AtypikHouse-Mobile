@@ -21,8 +21,10 @@ class Locations extends Component {
   }
 
   _loadLocations() {
+    console.log("location");
     this.setState({ isLoading: true });
     getUser().then(data => {
+      console.log(data);
       this.setState({
         locations: [...this.state.locations, ...data.mesBiens],
         isLoading: false
@@ -39,11 +41,8 @@ class Locations extends Component {
     this._loadLocations();
   }
 
-  /* _displayDetailForLodging = idLocation => {
-        NavigationService.navigate("LocationDetail", { idLocation: idLocation });
-      };*/
-  _displayDetailForLodging = () => {
-    NavigationService.navigate("LocationDetail");
+  _displayDetailForLodging = idLocation => {
+    NavigationService.navigate("LocationDetail", { idLodging: idLocation });
   };
 
   _displayResultData() {

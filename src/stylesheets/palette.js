@@ -1,8 +1,8 @@
 const palette = {
-  black: "#1a202c",
-  green: "#45b864",
+  black: "#000000",
+  green: "#2B8322",
   red: "#cb2026",
-  blue: "#38c0c4",
+  blue: "#008489",
   blueGray: "#ebf6f7",
   white: "#fff"
 };

@@ -1,6 +1,6 @@
 import { AsyncStorage } from "react-native";
 
-const url = "http://192.168.1.50:8000/api/";
+const url = "https://atypikhouse-f2i.tk/api/";
 
 export async function getUserToken(username, password) {
   const urlPath = url + "login_check";
@@ -48,6 +48,8 @@ export async function getUser() {
       }
     });
     let responseJson = await response.json();
+    console.log("sqds");
+    console.log(responseJson.myBooking);
     return responseJson;
   } catch (error) {
     console.error(error);
@@ -99,16 +101,10 @@ export async function getCategory() {
 }
 
 export async function getLodgingsFromApiWithSearchText(text) {
-  const token = await AsyncStorage.getItem("USER_TOKEN");
   const urlPath = `${url}property/${text}`;
 
   try {
-    let response = await fetch(urlPath, {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + token
-      }
-    });
+    let response = await fetch(urlPath);
     let responseJson = await response.json();
     return responseJson;
   } catch (error) {
@@ -117,18 +113,11 @@ export async function getLodgingsFromApiWithSearchText(text) {
 }
 
 export async function getLodgingDetailFromApi(id) {
-  const token = await AsyncStorage.getItem("USER_TOKEN");
   const urlPath = `${url}property/find/${id}`;
 
   try {
-    let response = await fetch(urlPath, {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + token
-      }
-    });
+    let response = await fetch(urlPath);
     let responseJson = await response.json();
-
     return responseJson;
   } catch (error) {
     console.error(error);
@@ -138,7 +127,7 @@ export async function getLodgingDetailFromApi(id) {
 export async function getReservationsUserFromApi() {
   const token = await AsyncStorage.getItem("USER_TOKEN");
   console.log(token);
-  const urlPath = `${url}booking`;
+  const urlPath = `${url}mybooking`;
   console.log(urlPath);
   try {
     let response = await fetch(urlPath, {

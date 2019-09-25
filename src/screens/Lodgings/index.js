@@ -24,7 +24,7 @@ class Lodgings extends Component {
       // listPicker: [],
       lodgings: [],
       isLoading: false,
-      category: "Cabane"
+      category: ""
     };
   }
 
@@ -58,7 +58,7 @@ class Lodgings extends Component {
       appTitle: "Succes",
       title: "Bienvenue",
       body: user,
-      slideOutTime: 5000
+      slideOutTime: 2000
     });
     /*getCategory().then(data => {
       const listCategory = [];

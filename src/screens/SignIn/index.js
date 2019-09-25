@@ -42,7 +42,7 @@ class SignIn extends Component {
           appTitle: "Erreur",
           title: "Erreur de connexion",
           body: "Identifiant ou mot de passe incorrect",
-          slideOutTime: 5000
+          slideOutTime: 2000
         });
       }
     });

@@ -31,7 +31,7 @@ const styles = {
     },
     success: {
       height: 32,
-      backgroundColor: palette.green,
+      backgroundColor: palette.blue,
       borderTopLeftRadius: 12,
       borderTopRightRadius: 12,
       paddingVertical: 6,

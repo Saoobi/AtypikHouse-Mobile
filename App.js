@@ -104,6 +104,12 @@ class App extends Component {
           navigationOptions: {
             title: "Mes atypikHouses"
           }
+        },
+        LocationDetail: {
+          screen: LodgingDetail,
+          navigationOptions: {
+            header: null
+          }
         }
       },
       {
