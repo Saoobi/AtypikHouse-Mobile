@@ -1,7 +1,16 @@
+import { Dimensions } from "react-native";
+
 import palette from "../../stylesheets/palette";
 
+const { width: deviceWidth } = Dimensions.get("window");
+const HORIZONTAL_MARGIN = 15;
+
 const styles = {
-  containerMain: {
+  container_global: {
+    display: "flex",
+    flex: 1
+  },
+  container_main: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -10,6 +19,7 @@ const styles = {
     backgroundColor: palette.blueGray
   },
   logo: {
+    zIndex: 0,
     justifyContent: "center",
     alignItems: "center",
     flex: 2
@@ -17,6 +27,11 @@ const styles = {
   form: {
     flex: 2,
     justifyContent: "center"
+  },
+  //popup
+  popupContainer: {
+    zIndex: 1,
+    width: deviceWidth - HORIZONTAL_MARGIN * 2
   }
 };
 

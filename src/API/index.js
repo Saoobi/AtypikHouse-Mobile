@@ -2,18 +2,6 @@ import { AsyncStorage } from "react-native";
 
 const url = "http://192.168.1.50:8000/api/";
 
-export async function signInUser(username, password) {
-  let user;
-
-  await getUserToken(username, password);
-
-  await getUser().then(dataUser => {
-    user = dataUser;
-  });
-
-  return user;
-}
-
 export async function getUserToken(username, password) {
   const urlPath = url + "login_check";
 
@@ -31,13 +19,18 @@ export async function getUserToken(username, password) {
     });
     let responseJson = await response.json();
 
-    try {
-      await AsyncStorage.setItem("USER_TOKEN", responseJson.token);
-    } catch (error) {
-      console.log(error.message);
-    }
+    let result = responseJson.token;
 
-    return responseJson.token;
+    if (result === undefined) {
+      return false;
+    } else {
+      try {
+        await AsyncStorage.setItem("USER_TOKEN", result);
+      } catch (error) {
+        console.log(error.message);
+      }
+      return result;
+    }
   } catch (error) {
     console.error(error);
   }
@@ -55,6 +48,32 @@ export async function getUser() {
       }
     });
     let responseJson = await response.json();
+    return responseJson;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function signUpUser(firstname, lastname, email, password) {
+  const urlPath = url + "register";
+
+  try {
+    let response = await fetch(urlPath, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        password,
+        firstname,
+        lastname
+      })
+    });
+    let responseJson = await response.json();
+
+    console.log(responseJson);
     return responseJson;
   } catch (error) {
     console.error(error);

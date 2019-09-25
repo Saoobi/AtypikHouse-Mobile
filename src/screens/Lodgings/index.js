@@ -1,17 +1,20 @@
 import React, { Component } from "react";
 import {
   ActivityIndicator,
+  AsyncStorage,
   FlatList,
   ScrollView,
   Text,
   View
 } from "react-native";
+import NotificationPopup from "react-native-push-notification-popup";
 
 import styles from "./styles";
 
 import Form from "../../components/Form";
 import Lodging from "../../components/Lodging";
 import NavigationService from "../../components/NavigationService";
+import Popup from "../../components/Popup";
 import { getCategory, getLodgingsFromApiWithSearchText } from "../../API";
 
 class Lodgings extends Component {
@@ -41,7 +44,22 @@ class Lodgings extends Component {
     });
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    let token = await AsyncStorage.getItem("USER_TOKEN");
+    let user = "Visiteur";
+    if (token) {
+      let firstname = await AsyncStorage.getItem("USER_FIRSTNAME");
+      let lastname = await AsyncStorage.getItem("USER_LASTNAME");
+      user = `${firstname} ${lastname}`;
+    }
+
+    this.popup.show({
+      appIconSource: "checkmark-circle",
+      appTitle: "Succes",
+      title: "Bienvenue",
+      body: user,
+      slideOutTime: 5000
+    });
     /*getCategory().then(data => {
       const listCategory = [];
       data.map(item => {
@@ -136,8 +154,23 @@ class Lodgings extends Component {
       }
     ];
 
+    const renderCustomPopup = ({ appIconSource, appTitle, title, body }) => (
+      <Popup
+        appIconSource={appIconSource}
+        appTitle={appTitle}
+        title={title}
+        body={body}
+      />
+    );
+
     return (
       <View style={styles.containerMain}>
+        <View style={styles.popupContainer}>
+          <NotificationPopup
+            ref={ref => (this.popup = ref)}
+            renderPopupContent={renderCustomPopup}
+          />
+        </View>
         <View>
           <Form
             handleInputChange={this.handleInputChange}

@@ -5,10 +5,12 @@ import Logo from "../../components/Logo";
 import Form from "../../components/Form";
 import styles from "./styles";
 
+import { signUpUser } from "../../API";
+
 class SignUp extends Component {
   state = {
+    firstname: "",
     lastname: "",
-    name: "",
     email: "",
     password: ""
   };
@@ -20,10 +22,10 @@ class SignUp extends Component {
   };
 
   handleFormSubmit = () => {
-    const { lastname, name, email, password } = this.state;
-    alert(
-      `lastname : ${lastname} - name: ${name} - email: ${email} - password ${password}`
-    );
+    const { firstname, lastname, email, password } = this.state;
+    signUpUser(email, lastname, firstname, password).then(data => {
+      console.log("sqdsq" + data);
+    });
   };
 
   render() {
@@ -35,7 +37,7 @@ class SignUp extends Component {
       },
       {
         label: "Prenom",
-        name: "name",
+        name: "firstname",
         type: "input"
       },
       {
