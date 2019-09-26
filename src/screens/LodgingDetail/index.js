@@ -53,8 +53,6 @@ class LodgingDetail extends Component {
       .then(json => {
         const positionDestination = json.results[0].geometry.location;
 
-        console.log(positionDestination);
-
         //Itineraire from current location (default) to positionDestination
         const data = {
           destination: {
@@ -77,7 +75,6 @@ class LodgingDetail extends Component {
   displayReservation() {
     if (this.props.navigation.state.params.reservation) {
       const reservation = this.props.navigation.state.params.reservation;
-      console.log(reservation);
       return (
         <View
           style={[styles.container_data, styles.container_reservation_data]}

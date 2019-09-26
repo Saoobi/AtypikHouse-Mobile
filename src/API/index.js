@@ -48,8 +48,6 @@ export async function getUser() {
       }
     });
     let responseJson = await response.json();
-    console.log("sqds");
-    console.log(responseJson.myBooking);
     return responseJson;
   } catch (error) {
     console.error(error);
@@ -136,7 +134,6 @@ export async function getReservationsUserFromApi() {
       }
     });
     let responseJson = await response.json();
-    //    console.log(responseJson);
     return responseJson;
   } catch (error) {
     console.error(error);

@@ -23,9 +23,7 @@ class SignUp extends Component {
 
   handleFormSubmit = () => {
     const { firstname, lastname, email, password } = this.state;
-    signUpUser(email, lastname, firstname, password).then(data => {
-      console.log("sqdsq" + data);
-    });
+    signUpUser(email, lastname, firstname, password).then(data => {});
   };
 
   render() {

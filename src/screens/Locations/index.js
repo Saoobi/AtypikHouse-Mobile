@@ -23,7 +23,6 @@ class Locations extends Component {
   _loadLocations() {
     this.setState({ isLoading: true });
     getUser().then(data => {
-      console.log(data);
       this.setState({
         locations: [...this.state.locations, ...data.mesBiens],
         isLoading: false

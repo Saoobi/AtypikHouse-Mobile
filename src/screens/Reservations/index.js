@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { ActivityIndicator, FlatList, View } from "react-native";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
 
 import Lodging from "../../components/Lodging";
 import NavigationService from "../../components/NavigationService";
 import { getLodgingDetailFromApi, getReservationsUserFromApi } from "../../API";
+
+import styles from "./styles";
 
 class Reservations extends Component {
   constructor(props) {
@@ -56,20 +58,33 @@ class Reservations extends Component {
     });
   };
 
-  _displayLoading() {
+  _displayResultData() {
+    /* AFFICHAGE */
+
+    //Lors de la recherche
     if (this.state.isLoading) {
       return (
-        <View>
+        <View style={styles.containerError}>
           <ActivityIndicator size="large" />
         </View>
       );
     }
-  }
 
-  render() {
-    return (
-      <View>
-        <View>
+    //Lorsque aucun résultat n'a été trouvé
+    if (!this.state.lodgings.length && !this.state.isLoading) {
+      return (
+        <View style={styles.containerError}>
+          <Text style={styles.textError}>
+            Pas de résultat trouvé pour votre recherche
+          </Text>
+        </View>
+      );
+    }
+
+    //Lorsque des données ont été récupérée
+    if (this.state.lodgings && this.state.lodgings.length) {
+      return (
+        <ScrollView>
           <FlatList
             data={this.state.lodgings}
             keyExtractor={item => item.location.id.toString()}
@@ -81,9 +96,14 @@ class Reservations extends Component {
               />
             )}
           />
-        </View>
-        {this._displayLoading()}
-      </View>
+        </ScrollView>
+      );
+    }
+  }
+
+  render() {
+    return (
+      <View style={styles.containerMain}>{this._displayResultData()}</View>
     );
   }
 }
