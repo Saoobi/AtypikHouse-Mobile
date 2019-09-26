@@ -126,19 +126,17 @@ export async function getLodgingDetailFromApi(id) {
 
 export async function getReservationsUserFromApi() {
   const token = await AsyncStorage.getItem("USER_TOKEN");
-  console.log(token);
-  const urlPath = `${url}mybooking`;
-  console.log(urlPath);
+  const urlPath = url + "mybooking";
+
   try {
     let response = await fetch(urlPath, {
       method: "GET",
       headers: {
-        Authorization: "Bearer" + token
+        Authorization: "Bearer " + token
       }
     });
     let responseJson = await response.json();
-
-    console.log(responseJson);
+    //    console.log(responseJson);
     return responseJson;
   } catch (error) {
     console.error(error);

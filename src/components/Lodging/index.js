@@ -1,14 +1,40 @@
 import React, { Component } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import moment from "moment";
 
 import styles from "./styles";
 
 class Lodging extends Component {
   render() {
     const { lodging, displayDetailForLodging } = this.props;
+
+    const reservationDate = () => {
+      if (this.props.reservation) {
+        const { reservation } = this.props;
+
+        return (
+          <View style={styles.reservation_container}>
+            <Text style={styles.reservation_text}>
+              Du {moment(reservation.startDate).format("DD/MM/YYYY")} au{" "}
+              {moment(reservation.endDate).format("DD/MM/YYYY")}
+            </Text>
+          </View>
+        );
+      } else {
+        return false;
+      }
+    };
+
+    const reservationDisplayDetail = () => {
+      if (this.props.reservation) {
+        return displayDetailForLodging(lodging.id, this.props.reservation);
+      } else {
+        return displayDetailForLodging(lodging.id);
+      }
+    };
     return (
       <TouchableOpacity
-        onPress={() => displayDetailForLodging(lodging.id)}
+        onPress={() => reservationDisplayDetail()}
         style={styles.main_container}
       >
         <Image style={styles.image} source={{ uri: lodging.albums[0] }} />
@@ -22,8 +48,11 @@ class Lodging extends Component {
               {lodging.description}
             </Text>
           </View>
-          <View style={styles.date_container}>
-            <Text style={styles.date_text}>à {lodging.city}</Text>
+          <View style={styles.footer_container}>
+            {reservationDate()}
+            <View style={styles.date_container}>
+              <Text style={styles.date_text}>à {lodging.city}</Text>
+            </View>
           </View>
         </View>
       </TouchableOpacity>

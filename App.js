@@ -18,6 +18,7 @@ import Lodgings from "./src/screens/Lodgings";
 import LodgingDetail from "./src/screens/LodgingDetail";
 import palette from "./src/stylesheets/palette";
 import Reservations from "./src/screens/Reservations";
+//import ReservationDetail from "./src/screen/ReservationDetail";
 import SignIn from "./src/screens/SignIn";
 import SignUp from "./src/screens/SignUp";
 
@@ -89,6 +90,12 @@ class App extends Component {
           screen: Reservations,
           navigationOptions: {
             title: "Mes réservations"
+          }
+        },
+        ReservationDetail: {
+          screen: LodgingDetail,
+          navigationOptions: {
+            header: null
           }
         }
       },

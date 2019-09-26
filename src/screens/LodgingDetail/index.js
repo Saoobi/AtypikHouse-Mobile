@@ -74,17 +74,60 @@ class LodgingDetail extends Component {
       .catch(error => console.warn(error));
   }
 
+  displayReservation() {
+    if (this.props.navigation.state.params.reservation) {
+      const reservation = this.props.navigation.state.params.reservation;
+      console.log(reservation);
+      return (
+        <View
+          style={[styles.container_data, styles.container_reservation_data]}
+        >
+          <View style={styles.container_titleDescription}>
+            <Icon
+              style={styles.icon_titleDescription}
+              color={palette.black}
+              name="globe"
+              size={20}
+            />
+            <Text style={styles.titleDescription_text}>Reservation</Text>
+          </View>
+          <View style={styles.container_detail}>
+            <View style={styles.container_reservation}>
+              <View style={styles.container_reservation_column}>
+                <Text>
+                  Début : {moment(reservation.startDate).format("DD/MM/YYYY")}
+                </Text>
+                <Text>
+                  Fin : {moment(reservation.startDate).format("DD/MM/YYYY")}
+                </Text>
+              </View>
+              <View style={styles.container_reservation_column}>
+                <Text>{reservation.voyageur} Voyageurs</Text>
+                <Text style={styles.reservation_price_text}>
+                  Prix Total : {reservation.prixTotal} €
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      );
+    } else {
+      return false;
+    }
+  }
   _displayLodging() {
     const lodging = this.state.lodging;
     if (lodging != undefined) {
       return (
         <ScrollView style={styles.scrollView_container}>
           <View>
-            <SliderBox
-              images={this.state.images}
-              sliderBoxHeight={300}
-              dotColor={palette.blue}
-            />
+            <View style={styles.container_image}>
+              <SliderBox
+                images={this.state.images}
+                sliderBoxHeight={300}
+                dotColor={palette.blue}
+              />
+            </View>
             <Icon
               color={palette.blue}
               name="arrow-back"
@@ -122,6 +165,7 @@ class LodgingDetail extends Component {
                 </Text>
               </View>
             </View>
+            {this.displayReservation()}
             <View style={styles.container_data}>
               <View style={styles.container_titleDescription}>
                 <Icon

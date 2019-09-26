@@ -1,3 +1,5 @@
+import palette from "../../stylesheets/palette";
+
 const styles = {
   main_container: {
     margin: 15,
@@ -51,12 +53,30 @@ const styles = {
     fontStyle: "italic",
     color: "#666666"
   },
+  footer_container: {
+    flex: 1,
+    flexDirection: "row"
+  },
   date_container: {
     flex: 1
   },
   date_text: {
+    alignSelf: "flex-end",
     textAlign: "right",
-    fontSize: 14
+    fontSize: 14,
+    padding: 5
+  },
+  reservation_container: {
+    flex: 2
+  },
+  reservation_text: {
+    alignSelf: "flex-start",
+    color: palette.blue,
+    fontSize: 14,
+    padding: 5,
+    borderWidth: 1,
+    borderRadius: 4,
+    borderColor: palette.blue
   }
 };
 

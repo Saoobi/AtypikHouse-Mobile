@@ -17,6 +17,10 @@ const styles = StyleSheet.create({
   scrollView_container: {
     flex: 1
   },
+  container_image: {
+    height: 300,
+    backgroundColor: palette.blueGray
+  },
   price_text: {
     position: "absolute",
     top: "82%",
@@ -38,7 +42,7 @@ const styles = StyleSheet.create({
   },
   icon_back: {
     position: "absolute",
-    top: "6%",
+    top: "9%",
     left: "5%"
   },
   container_content: {
@@ -50,6 +54,12 @@ const styles = StyleSheet.create({
   },
   container_data: {
     marginBottom: 15
+  },
+  container_reservation_data: {
+    padding: 5,
+    borderWidth: 2,
+    borderColor: palette.blue,
+    borderRadius: 4
   },
   category_text: {
     color: palette.blue,
@@ -76,6 +86,17 @@ const styles = StyleSheet.create({
   },
   container_detail: {
     marginLeft: 10
+  },
+  container_reservation: {
+    flex: 1,
+    flexDirection: "row"
+  },
+  container_reservation_column: {
+    flex: 1
+  },
+  reservation_price_text: {
+    color: palette.blue,
+    fontWeight: "bold"
   },
   description_text: {
     fontStyle: "italic",

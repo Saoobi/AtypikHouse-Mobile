@@ -19,10 +19,6 @@ function Home() {
             buttonTitle="Connexion"
             onPress={() => NavigationService.navigate("SignIn")}
           />
-          <Button
-            buttonTitle="Inscription"
-            onPress={() => NavigationService.navigate("SignUp")}
-          />
         </View>
         <Button
           buttonType="transparent"

@@ -21,7 +21,6 @@ class Locations extends Component {
   }
 
   _loadLocations() {
-    console.log("location");
     this.setState({ isLoading: true });
     getUser().then(data => {
       console.log(data);
@@ -31,9 +30,6 @@ class Locations extends Component {
       });
       this.NbLocations = data.mesBiens.length;
       this.user = data.user;
-
-      console.log(this.NbLocations);
-      console.log(this.user);
     });
   }
 

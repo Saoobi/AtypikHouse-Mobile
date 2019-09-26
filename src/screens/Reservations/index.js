@@ -3,7 +3,7 @@ import { ActivityIndicator, FlatList, View } from "react-native";
 
 import Lodging from "../../components/Lodging";
 import NavigationService from "../../components/NavigationService";
-import { getReservationsUserFromApi } from "../../API";
+import { getLodgingDetailFromApi, getReservationsUserFromApi } from "../../API";
 
 class Reservations extends Component {
   constructor(props) {
@@ -14,8 +14,24 @@ class Reservations extends Component {
   _loadLodgings() {
     this.setState({ isLoading: true });
     getReservationsUserFromApi().then(data => {
+      data.map(item => {
+        getLodgingDetailFromApi(item.biens_louer.id).then(lodging => {
+          const reservation = {
+            idLocation: item.id,
+            startDate: item.startDate,
+            endDate: item.endDate,
+            dureeSejour: item.duree_sejour,
+            voyageur: item.voyageur,
+            prixTotal: item.prixTotal,
+            location: lodging
+          };
+          this.setState({
+            lodgings: [...this.state.lodgings, reservation]
+          });
+        });
+      });
+
       this.setState({
-        lodgings: [...this.state.lodgings, ...data],
         isLoading: false
       });
     });
@@ -33,8 +49,11 @@ class Reservations extends Component {
     );
   }
 
-  _displayDetailForLodging = idLodging => {
-    NavigationService.navigate("LodgingDetail", { idLodging: idLodging });
+  _displayDetailForLodging = (idLodging, reservation) => {
+    NavigationService.navigate("ReservationDetail", {
+      idLodging: idLodging,
+      reservation: reservation
+    });
   };
 
   _displayLoading() {
@@ -53,11 +72,12 @@ class Reservations extends Component {
         <View>
           <FlatList
             data={this.state.lodgings}
-            keyExtractor={item => item.id.toString()}
+            keyExtractor={item => item.location.id.toString()}
             renderItem={({ item }) => (
               <Lodging
-                lodging={item}
+                lodging={item.location}
                 displayDetailForLodging={this._displayDetailForLodging}
+                reservation={item}
               />
             )}
           />
