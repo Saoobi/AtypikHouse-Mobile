@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import {
+  ScrollView,
+  ActivityIndicator,
+  FlatList,
+  Text,
+  View
+} from "react-native";
 
 import Lodging from "../../components/Lodging";
 import NavigationService from "../../components/NavigationService";
